@@ -18,11 +18,12 @@ class TheServer:
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind((host, port))
-        self.server.listen(200)
+        self.server.listen(0)
 
     def main_loop(self):
         self.input_list.append(self.server)
         while 1:
+            #todo: disconnect new clients if the number is > 2
             time.sleep(delay)
             inputr, outputr, exceptr = select.select(self.input_list, [], [])
             for self.s in inputr:
@@ -44,18 +45,19 @@ class TheServer:
 
     def on_close(self):
         clientaddr = self.s.getpeername()
-        print " %s has disconnected" % clientaddr[0]
+        print clientaddr, "has disconnected"
         del(rackets[clientaddr[1]])
         #remove objects from input_list
         self.input_list.remove(self.s)
 
     def on_recv(self):
-        _id = self.s.getpeername()[1]
-        rackets[_id] = simplejson.loads(self.data)
-        self.s.send(simplejson.dumps(ships))
+        player_id = self.s.getpeername()[1]
+        rackets[player_id] = simplejson.loads(self.data)
+        self.s.send(simplejson.dumps(rackets))
 
 if __name__ == '__main__':
         server = TheServer('0.0.0.0', 50090)
+        print "Server listening..."
         try:
             server.main_loop()
         except KeyboardInterrupt:

@@ -3,6 +3,7 @@ import sprobj
 class Racket(sprobj.SprObj):
 
     SCORE = 0
+
     def increase_score(self):
         self.SCORE += 1
 

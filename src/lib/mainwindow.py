@@ -1,20 +1,18 @@
-import simplejson, socket
-import pyglet
+import simplejson, socket, sys, pyglet
 import settings
 from racket import Racket
 from ball import Ball
 
-
-
-def forward():
-    conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    conn.connect(('192.168.1.43', 50090))
-    me = str(conn.getsockname()[1])
-    print "Connected with id: %s" % me
-    return [me, conn]
-
-
-
+def connect():
+    try:
+        conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        conn.connect((settings.SERVER_IP, settings.SERVER_PORT))
+        me = str(conn.getsockname()[1])
+        print "Client connected to %s:%s with id: %s" % (settings.SERVER_IP, settings.SERVER_PORT, me)
+        return [me, conn]
+    except socket.error:
+        print "Couldn't connect to game server in: %s:%s" % (settings.SERVER_IP, settings.SERVER_PORT)
+        sys.exit(1)
 
 class MainWindow(pyglet.window.Window):
     keys = None
@@ -26,11 +24,11 @@ class MainWindow(pyglet.window.Window):
     master_client = False
 
     def __init__(self, *args, **kwargs):
+        self.me, self.conn = connect()
         pyglet.window.Window.__init__(self, *args, **kwargs)
         self.load_sprites()
         self.keys = pyglet.window.key.KeyStateHandler()
         self.push_handlers(self.keys)
-        self.me, self.conn = forward()
 
     def run(self):
         if not self.running:
@@ -49,7 +47,6 @@ class MainWindow(pyglet.window.Window):
         self.ball = Ball(pyglet.resource.image(settings.BALL_IMG)).center_anchor_y(settings.WINDOW_HEIGHT).center_anchor_x(settings.WINDOW_WIDTH)
         self.racket_right.x = settings.WINDOW_WIDTH - self.racket_right.IMG.width
         self.racket_me = self.racket_left
-        #self.score.text = 'Player1: %d  -  Player2: %d' % (self.racket_left.SCORE, self.racket_right.SCORE)
 
     def define_players(self, server_response):
         if self.me == sorted(server_response.keys())[0]: #the first client connection
@@ -77,7 +74,9 @@ class MainWindow(pyglet.window.Window):
             if player:
                 self.ball.hit_racket()
                 player.increase_score()
-       
+            if self.ball.check_collision_laterals(settings.WINDOW_HEIGHT):
+                self.ball.hit_lateral()
+
         data = {
             "ball": {
                 "x": self.ball.x,

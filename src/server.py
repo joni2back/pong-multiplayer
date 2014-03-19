@@ -1,15 +1,12 @@
 #!/usr/bin/python
-import socket
-import select
-import time
-import sys
-import simplejson
+import socket, select, sys, time, simplejson
+import lib.settings as settings
 
 buffer_size = 2000
-delay = 0
+delay = 0.05
 rackets = {}
 
-class TheServer:
+class GameServer:
 
     def __init__(self, host, port):
         self.input_list = []
@@ -47,7 +44,6 @@ class TheServer:
         clientaddr = self.s.getpeername()
         print clientaddr, "has disconnected"
         del(rackets[clientaddr[1]])
-        #remove objects from input_list
         self.input_list.remove(self.s)
 
     def on_recv(self):
@@ -56,7 +52,7 @@ class TheServer:
         self.s.send(simplejson.dumps(rackets))
 
 if __name__ == '__main__':
-        server = TheServer('0.0.0.0', 50090)
+        server = GameServer(settings.SERVER_IP, settings.SERVER_PORT)
         print "Server listening..."
         try:
             server.main_loop()

@@ -41,6 +41,12 @@ class SprObj(pyglet.sprite.Sprite):
         for sprite in others_list:
             if (self.bottom <= sprite.top and self.top >= sprite.bottom and
                 self.right >= sprite.left and self.left <= sprite.right):
-                print "Collision detected"
+                print "Object collision detected"
                 return sprite
 
+    def check_collision_laterals(self, window_height):
+        print self.top
+        print window_height
+        if self.top > window_height or self.top < self.height:
+            print "Lateral collision detected"
+            return True

@@ -2,16 +2,11 @@ import pyglet
 
 class SprObj(pyglet.sprite.Sprite):
 
-    ROTATION = 0
-    SPEED = 0
-    IMG = None
+    img = None
 
     def __init__(self, img, x=0, y=0, blend_src=770, blend_dest=771, batch=None, group=None, usage='dynamic'):
-        self.IMG = img
         pyglet.sprite.Sprite.__init__(self, img, x, y, blend_src, blend_dest, batch, group, usage)
-
-    def move(self, x, y):
-        self.set_position(self.x + x, self.y + y)
+        self.img = img
 
     @property
     def left(self):
@@ -29,6 +24,15 @@ class SprObj(pyglet.sprite.Sprite):
     def bottom(self):
         return self.y
 
+    def move(self, x, y):
+        self.set_position(self.x + x, self.y + y)
+
+    def set_width(self, width):
+        self.img.width = width
+
+    def set_height(self, height):
+        self.img.height = height
+
     def center_anchor_y(self, window_height):
         self.y = window_height / 2 - self.height // 2
         return self
@@ -45,8 +49,6 @@ class SprObj(pyglet.sprite.Sprite):
                 return sprite
 
     def check_collision_laterals(self, window_height):
-        print self.top
-        print window_height
         if self.top > window_height or self.top < self.height:
             print "Lateral collision detected"
             return True

@@ -4,7 +4,7 @@ class Ball(sprobj.SprObj):
 
     MOVING_RIGHT = True
     MOVING_TOP = True
-    HORIZONTAL_MOVIMENT = 3
+    HORIZONTAL_MOVIMENT = 1
     VERTICAL_MOVIMENT = 0.8
 
     def hit_racket(self):
@@ -13,13 +13,20 @@ class Ball(sprobj.SprObj):
     def hit_lateral(self):
         self.MOVING_TOP = not self.MOVING_TOP
 
-    def moving(self, clock):
-        if self.MOVING_RIGHT:
-            self.move(self.HORIZONTAL_MOVIMENT, 0)
-        else:
-            self.move(-self.HORIZONTAL_MOVIMENT, 0)
+    def prevent_stick(self, racket):
+        self.move(self.get_x_moviment() *.1* racket.width, 0)
 
-        if self.MOVING_TOP:
-            self.move(0, self.VERTICAL_MOVIMENT)
+    def moving(self, clock):
+        self.move(self.get_x_moviment(), self.get_y_moviment())
+
+    def get_x_moviment(self):
+        if self.MOVING_RIGHT:
+            return self.HORIZONTAL_MOVIMENT
         else:
-            self.move(0, -self.VERTICAL_MOVIMENT)
+            return -self.HORIZONTAL_MOVIMENT
+
+    def get_y_moviment(self):
+        if self.MOVING_TOP:
+            return self.VERTICAL_MOVIMENT
+        else:
+            return -self.VERTICAL_MOVIMENT

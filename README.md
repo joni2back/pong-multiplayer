@@ -5,13 +5,6 @@
  
 
 
-**Installation**
-```sh
-sudo pip install pyglet
-git clone https://github.com/joni2back/pong-multiplayer.git
-cd pong-multiplayer/src
-```
-
 **Running server**
 ```bash
 sudo pip install pyglet
@@ -22,7 +15,7 @@ python server.py
 ```
 
 **Running client**
-```
+```bash
 sudo pip install pyglet
 git clone https://github.com/joni2back/pong-multiplayer.git
 cd pong-multiplayer/src

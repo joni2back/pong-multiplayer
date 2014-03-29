@@ -3,7 +3,7 @@ import socket, select, sys, time, simplejson
 import lib.settings as settings
  
 buffer_size = 2000
-delay = 0.05
+delay = 0.01
 rackets = {}
 
 class GameServer:

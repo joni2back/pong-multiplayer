@@ -2,7 +2,11 @@
 
 * Written in python with pyglet
 * Using socket connections to share data with the server
- 
+
+##### TODO
+* Game pause
+* GUI to define server
+* Mouse support
 
 
 **Running server**

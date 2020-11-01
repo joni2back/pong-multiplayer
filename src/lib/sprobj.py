@@ -24,8 +24,8 @@ class SprObj(pyglet.sprite.Sprite):
     def bottom(self):
         return self.y
 
-    def move(self, x, y):
-        self.update(x=(self.x + x), y=(self.y + y))
+    def move(self, dx, dy):
+        self.update(x=self.x + dx, y=self.y + dy)
 
     def set_width(self, width):
         self.img.width = width

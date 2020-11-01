@@ -37,7 +37,7 @@ class Game(pyglet.window.Window):
     def draw(self):
         sleep_time = clock.get_sleep_time(self.sleep_idle)
         self.debug_text.text = \
-            f"FPS: {clock.get_fps()}, SleepTime: {sleep_time}"
+            f"FPS: {round(clock.get_fps(), 2)}"
         if self.multiplayer_mode:
             self.draw_multiplayer()
         else:
@@ -69,11 +69,13 @@ class Game(pyglet.window.Window):
             self.primary_client = True
             self.racket_me = self.racket_left
             self.racket_vs = self.racket_right
-            self.score.text = 'I\'m primary'
+            if not self.running:
+                self.score.text = 'I\'m primary'
         else:
             self.racket_me = self.racket_right
             self.racket_vs = self.racket_left
-            self.score.text = 'I\'m secondary'
+            if not self.running:
+                self.score.text = 'I\'m secondary'
 
     def on_collision(self):
         player = self.ball.check_collision([self.racket_left, self.racket_right])
@@ -95,6 +97,8 @@ class Game(pyglet.window.Window):
                 "y": self.racket_me.y,
             }
         }
+        if self.primary_client:
+            data['score'] = [self.racket_left.SCORE, self.racket_right.SCORE]
         self.conn.send(simplejson.dumps(data).encode('utf-8'))
         self.server_data = simplejson.loads(self.conn.recv(2000).decode('utf-8'))
         return self.server_data
@@ -104,10 +108,14 @@ class Game(pyglet.window.Window):
             if playerid != self.me:
                 player_data = data[playerid]
                 if 'racket' in player_data:
+                    self.racket_vs.x = player_data['racket']['x']
                     self.racket_vs.y = player_data['racket']['y']
                 if not self.primary_client and 'ball' in player_data:
                     self.ball.x = player_data['ball']['x']
                     self.ball.y = player_data['ball']['y']
+                if 'score' in player_data:
+                    self.racket_left.SCORE = player_data['score'][0]
+                    self.racket_right.SCORE = player_data['score'][1]
 
     def draw_multiplayer(self):
         self.define_players(self.server_data)
@@ -119,6 +127,9 @@ class Game(pyglet.window.Window):
 
         if self.primary_client:
             self.on_collision()
+
+        if self.running:
+            self.score.text = f"{self.racket_left.SCORE} : {self.racket_right.SCORE}"
 
         self.update_multiplayer_positions(self.server_data)
 

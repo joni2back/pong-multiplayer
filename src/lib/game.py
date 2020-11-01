@@ -1,4 +1,6 @@
-import simplejson, socket, pyglet
+import socket, sys
+import pyglet, simplejson
+from pyglet import clock
 from . import settings
 from .racket import Racket
 from .ball import Ball
@@ -30,6 +32,8 @@ class Game(pyglet.window.Window):
             self.me, self.conn = connect()
 
     def draw(self):
+        self.debug_text.text = \
+            f"FPS: {clock.get_fps()}, SleepTime: {clock.get_sleep_time(True)}"
         if self.multiplayer_mode:
             self.draw_multiplayer()
         else:
@@ -37,15 +41,16 @@ class Game(pyglet.window.Window):
 
     def run(self):
         if not self.running:
-            pyglet.clock.schedule_interval(self.ball.moving, .005)
+            clock.schedule_interval(self.ball.moving, .005)
             self.running = True
 
     def pause(self):
         if self.running:
-            pyglet.clock.unschedule(self.ball.moving)
+            clock.unschedule(self.ball.moving)
             self.running = False
 
     def load_sprites(self):
+        self.debug_text = pyglet.text.Label("FPS: ?, SleepTime: ?", font_size=10, x=0, y=settings.WINDOW_HEIGHT, anchor_x='left', anchor_y='top')
         self.score = pyglet.text.Label('', font_size=15, x=settings.WINDOW_WIDTH/2, y=settings.WINDOW_HEIGHT - 15, anchor_x='center', anchor_y='center')
         self.racket_left = Racket(pyglet.resource.image(settings.RACKET_IMG)).center_anchor_y(settings.WINDOW_HEIGHT)
         self.racket_right = Racket(pyglet.resource.image(settings.RACKET_IMG)).center_anchor_y(settings.WINDOW_HEIGHT)

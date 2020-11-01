@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 import socket, select, sys, time, simplejson
 import lib.settings as settings
  

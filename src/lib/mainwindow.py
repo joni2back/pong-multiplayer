@@ -21,6 +21,9 @@ class MainWindow(pyglet.window.Window):
             + (-settings.MOVE_SPEED if self.keys[pyglet.window.key.DOWN] else 0)
         self.move_racket(0, dy)
 
+    def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
+        self.move_racket(scroll_x * settings.MOVE_SPEED, scroll_y * settings.MOVE_SPEED)
+
     def on_draw(self):
         self.clear()
         self.parse_keys()

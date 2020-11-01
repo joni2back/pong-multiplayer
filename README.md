@@ -8,7 +8,6 @@ Pong multiplayer is a Table-Tennis game that supports LAN multiplayer (and singl
 ## TODO
 * Game pause
 * GUI to define server
-* Mouse support
 
 ## Running
 

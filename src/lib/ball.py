@@ -14,18 +14,18 @@ class Ball(sprobj.SprObj):
         self.MOVING_TOP = not self.MOVING_TOP
 
     def prevent_stick(self, racket):
-        self.move(self.get_x_moviment() *.1* racket.width, 0)
+        self.move(self.get_x_movement() *.1* racket.width, 0)
 
     def moving(self, clock):
-        self.move(self.get_x_moviment(), self.get_y_moviment())
+        self.move(self.get_x_movement(), self.get_y_movement())
 
-    def get_x_moviment(self):
+    def get_x_movement(self):
         if self.MOVING_RIGHT:
             return self.HORIZONTAL_MOVIMENT
         else:
             return -self.HORIZONTAL_MOVIMENT
 
-    def get_y_moviment(self):
+    def get_y_movement(self):
         if self.MOVING_TOP:
             return self.VERTICAL_MOVIMENT
         else:

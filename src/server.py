@@ -20,7 +20,7 @@ class GameServer:
     def main_loop(self):
         self.input_list.append(self.server)
         while 1:
-            #todo: disconnect new clients if the number is > 2
+            # TODO: disconnect new clients if the number is > 2
             time.sleep(delay)
             inputr, outputr, exceptr = select.select(self.input_list, [], [])
             for self.s in inputr:

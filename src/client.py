@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#author Jonas Sciangula Street
+# Copyright 2014 Jonas Sciangula Street
 
 # Do not generate bytecodes in developer mode
 import math, sys, socket

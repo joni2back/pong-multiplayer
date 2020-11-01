@@ -12,13 +12,14 @@ class MainWindow(pyglet.window.Window):
         self.keys = pyglet.window.key.KeyStateHandler()
         self.push_handlers(self.keys)
 
-    def parse_keys(self):
+    def move_racket(self, dx, dy):
         racket = self.game.racket_me
-        if self.keys[pyglet.window.key.UP] and racket.y < settings.WINDOW_HEIGHT - racket.height:
-            racket.move(0, settings.MOVE_SPEED)
+        racket.move(0, dy, y_bounds=(0, settings.WINDOW_HEIGHT - racket.height))
 
-        if self.keys[pyglet.window.key.DOWN] and racket.y > 0:
-            racket.move(0, -settings.MOVE_SPEED)
+    def parse_keys(self):
+        dy = (settings.MOVE_SPEED if self.keys[pyglet.window.key.UP] else 0) \
+            + (-settings.MOVE_SPEED if self.keys[pyglet.window.key.DOWN] else 0)
+        self.move_racket(0, dy)
 
     def on_draw(self):
         self.clear()

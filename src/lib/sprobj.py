@@ -24,8 +24,17 @@ class SprObj(pyglet.sprite.Sprite):
     def bottom(self):
         return self.y
 
-    def move(self, dx, dy):
-        self.update(x=self.x + dx, y=self.y + dy)
+    # bounds: (min, max)
+    def move(self, dx, dy, x_bounds=None, y_bounds=None):
+        return self.move_absolute(self.x + dx, self.y + dy, x_bounds=x_bounds, y_bounds=y_bounds)
+
+    # bounds: (min, max)
+    def move_absolute(self, x, y, x_bounds=None, y_bounds=None):
+        if x_bounds is not None:
+            x = min(max(x, x_bounds[0]), x_bounds[1])
+        if y_bounds is not None:
+            y = min(max(y, y_bounds[0]), y_bounds[1])
+        self.update(x=x, y=y)
 
     def set_width(self, width):
         self.img.width = width

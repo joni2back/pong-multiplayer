@@ -20,7 +20,7 @@ class Game(pyglet.window.Window):
     racket_right = None
     racket_me = None
     score = None
-    master_client = False
+    primary_client = False
     multiplayer_mode = False
 
     def __init__(self, multiplayer_mode = False):
@@ -55,14 +55,14 @@ class Game(pyglet.window.Window):
 
     def define_players(self, server_response):
         if self.me == sorted(server_response.keys())[0]: # the first client connection
-            self.master_client = True
+            self.primary_client = True
             self.racket_me = self.racket_left
             self.racket_vs = self.racket_right
-            self.score.text = 'Im master'
+            self.score.text = 'I\'m primary'
         else:
             self.racket_me = self.racket_right
             self.racket_vs = self.racket_left
-            self.score.text = 'Im slave'
+            self.score.text = 'I\'m secondary'
 
     def on_collision(self):
         player = self.ball.check_collision([self.racket_left, self.racket_right])
@@ -92,7 +92,7 @@ class Game(pyglet.window.Window):
             try:
                 if playerid != self.me:
                     self.racket_vs.y = data[playerid]['racket']['y']
-                    if not self.master_client:
+                    if not self.primary_client:
                         self.ball.x = data[playerid]['ball']['x']
                         self.ball.y = data[playerid]['ball']['y']
             except:
@@ -102,13 +102,13 @@ class Game(pyglet.window.Window):
         data = self.update_server_data()
         self.define_players(data)
 
-        if self.master_client:
+        if self.primary_client:
             if len(data.keys()) == 2:
                 self.run()
             else:
                 self.pause()
 
-        if self.master_client:
+        if self.primary_client:
             self.on_collision()
 
         self.update_multiplayer_positions(data)

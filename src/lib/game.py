@@ -1,17 +1,17 @@
 import simplejson, socket, pyglet
-import settings
-from racket import Racket
-from ball import Ball
+from . import settings
+from .racket import Racket
+from .ball import Ball
 
 def connect():
     try:
         conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         conn.connect((settings.SERVER_IP, settings.SERVER_PORT))
         me = str(conn.getsockname()[1])
-        print "Client connected to %s:%s with id: %s" % (settings.SERVER_IP, settings.SERVER_PORT, me)
+        print(f"Client connected to {settings.SERVER_IP}:{settings.SERVER_PORT} with id: {me}")
         return [me, conn]
     except socket.error:
-        print "Couldn't connect to game server in: %s:%s" % (settings.SERVER_IP, settings.SERVER_PORT)
+        print("Couldn't connect to game server in: {settings.SERVER_IP}:{settings.SERVER_PORT}")
         sys.exit(1)
 
 class Game(pyglet.window.Window):
@@ -54,7 +54,7 @@ class Game(pyglet.window.Window):
         self.racket_me = self.racket_left
 
     def define_players(self, server_response):
-        if self.me == sorted(server_response.keys())[0]: #the first client connection
+        if self.me == sorted(server_response.keys())[0]: # the first client connection
             self.master_client = True
             self.racket_me = self.racket_left
             self.racket_vs = self.racket_right
@@ -84,8 +84,8 @@ class Game(pyglet.window.Window):
                 "y": self.racket_me.y,
             }
         }
-        self.conn.send(simplejson.dumps(data))
-        return simplejson.loads(self.conn.recv(2000))
+        self.conn.send(simplejson.dumps(data).encode('utf-8'))
+        return simplejson.loads(self.conn.recv(2000).decode('utf-8'))
 
     def update_multiplayer_positions(self, data):
         for playerid in data.keys():

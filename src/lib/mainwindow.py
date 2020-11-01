@@ -1,6 +1,6 @@
 import simplejson, socket, sys, pyglet
-import settings
-import game
+from . import settings
+from . import game
 
 class MainWindow(pyglet.window.Window):
     keys = None

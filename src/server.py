@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import socket, select, sys, time, simplejson
-import lib.settings as settings
- 
+sys.dont_write_bytecode = True
+from lib import settings
+
 buffer_size = 2000
 delay = 0.01
 rackets = {}
@@ -36,26 +37,26 @@ class GameServer:
 
     def on_accept(self):
         clientsock, clientaddr = self.server.accept()
-        print clientaddr, "has connected"
+        print(clientaddr, "has connected")
         rackets[clientaddr[1]] = {}
         self.input_list.append(clientsock)
 
     def on_close(self):
         clientaddr = self.s.getpeername()
-        print clientaddr, "has disconnected"
+        print(clientaddr, "has disconnected")
         del(rackets[clientaddr[1]])
         self.input_list.remove(self.s)
 
     def on_recv(self):
         player_id = self.s.getpeername()[1]
-        rackets[player_id] = simplejson.loads(self.data)
-        self.s.send(simplejson.dumps(rackets))
+        rackets[player_id] = simplejson.loads(self.data.decode('utf-8'))
+        self.s.send(simplejson.dumps(rackets).encode('utf-8'))
 
 if __name__ == '__main__':
         server = GameServer(settings.SERVER_IP, settings.SERVER_PORT)
-        print "Server listening..."
+        print("Server listening...")
         try:
             server.main_loop()
         except KeyboardInterrupt:
-            print "Ctrl C - Stopping server"
+            print("Ctrl C - Stopping server")
             sys.exit(1)

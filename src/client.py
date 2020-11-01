@@ -6,8 +6,8 @@ import math, sys, socket
 sys.dont_write_bytecode = True
 
 
-import lib.mainwindow as mainwindow
-import lib.settings as settings
+from lib import mainwindow
+from lib import settings
 import pyglet
 
 

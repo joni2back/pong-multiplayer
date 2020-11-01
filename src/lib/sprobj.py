@@ -15,7 +15,7 @@ class SprObj(pyglet.sprite.Sprite):
     @property
     def right(self):
         return self.x + self.width
-    
+
     @property
     def top(self):
         return self.y + self.height
@@ -25,7 +25,7 @@ class SprObj(pyglet.sprite.Sprite):
         return self.y
 
     def move(self, x, y):
-        self.set_position(self.x + x, self.y + y)
+        self.update(x=(self.x + x), y=(self.y + y))
 
     def set_width(self, width):
         self.img.width = width
@@ -45,10 +45,10 @@ class SprObj(pyglet.sprite.Sprite):
         for sprite in others_list:
             if (self.bottom <= sprite.top and self.top >= sprite.bottom and
                 self.right >= sprite.left and self.left <= sprite.right):
-                print "Object collision detected"
+                print("Object collision detected")
                 return sprite
 
     def check_collision_laterals(self, window_height):
         if self.top > window_height or self.top < self.height:
-            print "Lateral collision detected"
+            print("Lateral collision detected")
             return True

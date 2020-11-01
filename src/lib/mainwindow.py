@@ -1,6 +1,6 @@
 import simplejson, socket, sys, pyglet
-import settings
-import game
+from . import settings
+from . import game
 
 class MainWindow(pyglet.window.Window):
     keys = None
@@ -15,7 +15,7 @@ class MainWindow(pyglet.window.Window):
     def parse_keys(self):
         if self.keys[pyglet.window.key.UP] and self.game.racket_me.y < settings.WINDOW_HEIGHT:
             self.game.racket_me.move(0, settings.MOVE_SPEED)
-            
+
         if self.keys[pyglet.window.key.DOWN] and self.game.racket_me.y > 0:
             self.game.racket_me.move(0, -settings.MOVE_SPEED)
 

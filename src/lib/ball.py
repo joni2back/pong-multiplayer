@@ -1,4 +1,4 @@
-import sprobj
+from . import sprobj
 
 class Ball(sprobj.SprObj):
 

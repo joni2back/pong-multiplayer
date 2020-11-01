@@ -14,7 +14,7 @@
 sudo pip install pyglet
 git clone https://github.com/joni2back/pong-multiplayer.git
 cd pong-multiplayer/src
-vim lib/settings.py #in order to define the server ip and port
+vim lib/settings.py # in order to define the server ip and port
 python server.py
 ```
 
@@ -23,6 +23,6 @@ python server.py
 sudo pip install pyglet
 git clone https://github.com/joni2back/pong-multiplayer.git
 cd pong-multiplayer/src
-vim lib/settings.py #in order to define server connection ip and port
+vim lib/settings.py # in order to define server connection ip and port
 python client.py
 ```

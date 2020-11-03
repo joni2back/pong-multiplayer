@@ -37,13 +37,13 @@ class GameServer:
 
     def on_accept(self):
         clientsock, clientaddr = self.server.accept()
-        print(clientaddr, "has connected")
+        print(f"{clientaddr} has connected")
         rackets[clientaddr[1]] = {}
         self.input_list.append(clientsock)
 
     def on_close(self):
         clientaddr = self.s.getpeername()
-        print(clientaddr, "has disconnected")
+        print(f"{clientaddr} has disconnected")
         del(rackets[clientaddr[1]])
         self.input_list.remove(self.s)
 

@@ -24,8 +24,17 @@ class SprObj(pyglet.sprite.Sprite):
     def bottom(self):
         return self.y
 
-    def move(self, x, y):
-        self.update(x=(self.x + x), y=(self.y + y))
+    # bounds: (min, max)
+    def move(self, dx, dy, x_bounds=None, y_bounds=None):
+        return self.move_absolute(self.x + dx, self.y + dy, x_bounds=x_bounds, y_bounds=y_bounds)
+
+    # bounds: (min, max)
+    def move_absolute(self, x, y, x_bounds=None, y_bounds=None):
+        if x_bounds is not None:
+            x = min(max(x, x_bounds[0]), x_bounds[1])
+        if y_bounds is not None:
+            y = min(max(y, y_bounds[0]), y_bounds[1])
+        self.update(x=x, y=y)
 
     def set_width(self, width):
         self.img.width = width
@@ -45,10 +54,10 @@ class SprObj(pyglet.sprite.Sprite):
         for sprite in others_list:
             if (self.bottom <= sprite.top and self.top >= sprite.bottom and
                 self.right >= sprite.left and self.left <= sprite.right):
-                print("Object collision detected")
+                print(f"Object collision: {self.position} with {sprite.position}")
                 return sprite
 
     def check_collision_laterals(self, window_height):
         if self.top > window_height or self.top < self.height:
-            print("Lateral collision detected")
+            print(f"Lateral collision: {self.position} with window")
             return True
